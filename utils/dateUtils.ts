@@ -11,3 +11,17 @@ export function formatDateToYYYYMMDD(date: Date): string {
     return `${year}-${month}-${day}`;
 }
 
+export function formatToExactDueDate(date: Date): string {
+    const options: Intl.DateTimeFormatOptions = {
+        day: '2-digit',
+        month: 'short',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: true,
+    };
+    const parts = date
+        .toLocaleString('en-US', options)
+        .replace(',', '')
+        .split(' ');
+    return `${parts[1]} ${parts[0]} ${parts[2]} ${parts[3]}`;
+}

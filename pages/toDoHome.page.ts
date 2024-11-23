@@ -4,7 +4,6 @@ export class ToDoHomePage {
     readonly url = "https://todo.ly/";
     readonly page: Page;
     readonly signUpFreeButton: Locator;
-    readonly signUpDialog: Locator;
     readonly fullNameInput: Locator;
     readonly emailInput: Locator;
     readonly passwordInput: Locator;
@@ -14,7 +13,6 @@ export class ToDoHomePage {
     constructor(page: Page) {
         this.page = page;
         this.signUpFreeButton = page.locator('.HPHeaderSignup > a:nth-child(1)');
-        this.signUpDialog = page.locator('.HPsignupDiv');
         this.fullNameInput = page.locator('#ctl00_MainContent_SignupControl1_TextBoxFullName');
         this.emailInput = page.locator('#ctl00_MainContent_SignupControl1_TextBoxEmail');
         this.passwordInput = page.locator('#ctl00_MainContent_SignupControl1_TextBoxPassword');
@@ -26,7 +24,7 @@ export class ToDoHomePage {
         await this.page.goto(this.url);
     }
 
-    async quickCreateNewUser(fullName: string, email: string, password = "InsecurePwd") {
+    async quickCreateNewUser(fullName: string, email: string, password = "1234") {
         await this.signUpFreeButton.waitFor({ state: 'visible' });
         await this.signUpFreeButton.click();
         await this.fullNameInput.waitFor({ state: 'visible' });
@@ -35,6 +33,6 @@ export class ToDoHomePage {
         await this.passwordInput.fill(password);
         await this.tosCheckbox.check();
         await this.signUpButton.click();
-        await expect(this.page.getByText('Logout')).toBeVisible();
+        await expect(this.page.getByText('Logout')).toBeVisible({ timeout: 10000 });
     }
 }

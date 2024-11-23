@@ -18,20 +18,14 @@ export class HomePage {
     }
 
     async goto() {
-        // Navegar a la URL base de la aplicación
         await this.page.goto('https://todo.ly/');
     }
 
     async registerUser(fullName: string, email: string, password: string) {
         await this.fullNameInput.waitFor({ state: 'visible', timeout: 30000 });
         await this.fullNameInput.fill(fullName);
-
-        await this.emailInput.waitFor({ state: 'visible', timeout: 30000 });
         await this.emailInput.fill(email);
-
-        await this.passwordInput.waitFor({ state: 'visible', timeout: 30000 });
         await this.passwordInput.fill(password);
-
         await this.tosCheckbox.check();
         await this.signUpButton.click();
     }
