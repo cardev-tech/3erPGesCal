@@ -1,0 +1,395 @@
+{
+	"info": {
+		"_postman_id": "ebfb4636-7b74-4675-9c02-f162923d4e8e",
+		"name": "3ER PARCIAL",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33354122"
+	},
+	"item": [
+		{
+			"name": "Get Icon by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response contains expected properties\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"Id\");\r",
+							"    pm.expect(jsonData).to.have.property(\"URL\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Id is 1\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.Id).to.eql(1);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"URL is valid and points to the correct domain\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.URL).to.include(\"http://todo.ly/Images/icons/\");\r",
+							"    pm.expect(jsonData.URL).to.match(/^http:\\/\\/todo\\.ly\\/Images\\/icons\\/[a-zA-Z0-9]+\\.png$/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 1000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response matches the expected structure and data\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.eql({\r",
+							"        Id: 1,\r",
+							"        URL: \"http://todo.ly/Images/icons/Home.png\"\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const timestamp = new Date().toISOString();\r",
+							"pm.environment.set(\"executionTime\", timestamp);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "cp@ucb.edu.bo",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "car123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://todo.ly/api/icons/1.json",
+					"protocol": "https",
+					"host": [
+						"todo",
+						"ly"
+					],
+					"path": [
+						"api",
+						"icons",
+						"1.json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Is Authen?",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is true\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.be.true;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response is not null or undefined\", function () {\r",
+							"    pm.expect(pm.response.json()).to.not.be.null;\r",
+							"    pm.expect(pm.response.json()).to.not.be.undefined;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is acceptable\", function () {\r",
+							"    const responseTime = pm.response.responseTime;\r",
+							"    if (responseTime > 200 && responseTime <= 500) {\r",
+							"        console.log(\"Warning: Response is slower than usual, but acceptable\");\r",
+							"    }\r",
+							"    pm.expect(responseTime).to.be.below(1000); // Máximo permitido\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response remains consistent (true)\", function () {\r",
+							"    const currentResponse = pm.response.json();\r",
+							"    const previousResponse = pm.environment.get(\"previousResponse\");\r",
+							"    \r",
+							"    if (previousResponse !== undefined) {\r",
+							"        pm.expect(currentResponse).to.eql(previousResponse);\r",
+							"    }\r",
+							"    \r",
+							"    pm.environment.set(\"previousResponse\", currentResponse);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Endpoint Requiere authentication\", function () {\r",
+							"    const statusCode = pm.response.status;\r",
+							"    pm.expect(statusCode).to.not.equal(401); // No debe devolver Unauthorized\r",
+							"    pm.expect(statusCode).to.not.equal(403); // No debe devolver Forbidden\r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "car123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "cp@ucb.edu.bo",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://todo.ly/api/authentication/isauthenticated.json",
+					"protocol": "https",
+					"host": [
+						"todo",
+						"ly"
+					],
+					"path": [
+						"api",
+						"authentication",
+						"isauthenticated.json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response contains all required properties\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"TokenString\");\r",
+							"    pm.expect(jsonData).to.have.property(\"UserEmail\");\r",
+							"    pm.expect(jsonData).to.have.property(\"ExpirationTime\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"TokenString has the correct format\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.TokenString).to.match(/^[a-z0-9]{32}$/i);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"ExpirationTime is a valid ISO 8601 date\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(() => new Date(jsonData.ExpirationTime)).to.not.throw(RangeError);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"UserEmail is valid\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.UserEmail).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/);\r",
+							"});\r",
+							"\r",
+							"// Parsear la respuesta JSON\r",
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"// Verificar que el TokenString exista en la respuesta\r",
+							"pm.test(\"El token fue obtenido exitosamente\", function () {\r",
+							"    pm.expect(jsonData).to.have.property(\"TokenString\");\r",
+							"});\r",
+							"\r",
+							"// Guardar el token en una variable de entorno\r",
+							"pm.environment.set(\"authToken\", jsonData.TokenString);\r",
+							"\r",
+							"// Mensaje en consola para depuración\r",
+							"console.log(\"Token guardado en el entorno: \" + jsonData.TokenString);\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://todo.ly/api/authentication/token.json",
+					"protocol": "https",
+					"host": [
+						"todo",
+						"ly"
+					],
+					"path": [
+						"api",
+						"authentication",
+						"token.json"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Del Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verificar respuesta 200 OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Estructura correcta en la respuesta\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property(\"TokenString\");\r",
+							"    pm.expect(jsonData).to.have.property(\"UserEmail\");\r",
+							"    pm.expect(jsonData).to.have.property(\"ExpirationTime\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Token eliminado correctamente (valor del Token)\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.TokenString).to.be.a(\"string\");\r",
+							"    pm.expect(jsonData.TokenString).to.have.lengthOf.above(0); // Opcional: verifica que no está vacío.\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirmación de eliminación (propiedades válidas)\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    \r",
+							"    // Verifica que el correo es un string\r",
+							"    pm.expect(jsonData.UserEmail).to.be.a(\"string\");\r",
+							"\r",
+							"    // Verifica que la fecha tiene el formato esperado (/Date(...)/)\r",
+							"    pm.expect(jsonData.ExpirationTime).to.match(/^\\/Date\\(\\d+\\)\\/$/); // Validación para /Date(...)/\r",
+							"\r",
+							"    // Opcional: Extrae y valida el timestamp si es necesario\r",
+							"    const timestamp = jsonData.ExpirationTime.match(/\\d+/)[0];\r",
+							"    pm.expect(Number(timestamp)).to.be.a(\"number\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Tiempo de respuesta aceptable\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Token",
+						"value": "{{authToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://todo.ly/api/authentication/token.json",
+					"protocol": "https",
+					"host": [
+						"todo",
+						"ly"
+					],
+					"path": [
+						"api",
+						"authentication",
+						"token.json"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "car123",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "cp@ucb.edu.bo",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
